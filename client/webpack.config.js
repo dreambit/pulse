@@ -12,18 +12,18 @@ module.exports = {
   devtool: 'source-map',
 
   resolve: {
-      extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx']
   },
 
   module: {
     loaders: [
       {
-          test: /\.jsx?$/,
-          exclude: /node_modules/,
-          loader: 'babel',
-          query: {
-            presets: ['es2015', "stage-2", 'react']
-          }
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015', "stage-2", 'react']
+        }
       },
       {
         test: /\.scss$/,
@@ -32,10 +32,10 @@ module.exports = {
     ]
   },
   plugins: [
-  new HtmlWebpackPlugin({
-    template: path.resolve(__dirname, 'src/app/index.html')
-  }),
-  new webpack.DefinePlugin({
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'src/app/index.html')
+    }),
+    new webpack.DefinePlugin({
       WS_CONNECTION_URL: ':3000'
-  })]
+    })]
 }

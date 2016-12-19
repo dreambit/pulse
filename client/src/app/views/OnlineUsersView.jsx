@@ -42,7 +42,7 @@ class OnlineUsersView extends React.Component {
     }, 2000);
   }
 
-  render () {
+  render() {
     return (
       <div>
         Online users
