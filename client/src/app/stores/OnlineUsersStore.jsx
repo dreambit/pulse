@@ -1,13 +1,58 @@
 import flux from 'flux-react';
 import _ from 'lodash';
 
-import actions from './../actions/OnlineUserActions';
+import Actions from './../actions/OnlineUserActions';
+import Gender from '../common/Gender';
 
 export default flux.createStore({
-    users: [],
+    users: [
+        {
+            name: `Rezvan`,
+            id: 1,
+            gender: Gender.MALE,
+            level: 'Intermediate',
+            countryCode: 'ru'
+        },
+        {
+            name: `Dreambitc`,
+            id: 2,
+            gender: Gender.MALE,
+            level: 'Upper-Intermediate',
+            countryCode: 'us'
+        },
+        {
+            name: `Loosy`,
+            id: 3,
+            gender: Gender.FEMALE,
+            level: 'Advanced',
+            countryCode: 'am'
+        },
+        {
+            name: `Rezvan`,
+            id: 4,
+            gender: Gender.MALE,
+            level: 'Intermediate',
+            countryCode: 'ru'
+        },
+        {
+            name: `Dreambitc`,
+            id: 5,
+            gender: Gender.MALE,
+            level: 'Upper-Intermediate',
+            countryCode: 'us'
+        },
+        {
+            name: `Loosy`,
+            id: 6,
+            gender: Gender.FEMALE,
+            level: 'Advanced',
+            countryCode: 'us'
+        }
+
+    ],
     actions: [
-        actions.addUser,
-        actions.removeUser
+        Actions.addUser,
+        Actions.removeUser
     ],
     addUser: function (user) {
       this.users.push(user);

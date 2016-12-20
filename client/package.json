@@ -6,13 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "serve": "webpack-dev-server"
+    "serve": "webpack-dev-server --progress"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bootstrap": "~4.0.0-alpha.5",
+    "famfamfam-flags": "^1.0.0",
     "flux-react": "~3.0.0",
+    "font-awesome": "^4.7.0",
     "i": "~0.3.5",
     "lodash": "~4.17.2",
     "npm": "~4.0.5",
@@ -31,10 +33,12 @@
     "babel-preset-react": "~6.16.0",
     "babel-preset-stage-2": "~6.18.0",
     "css-loader": "~0.26.1",
+    "file-loader": "^0.9.0",
     "html-webpack-plugin": "~2.24.1",
     "node-sass": "~4.0.0",
     "sass-loader": "~4.1.0",
     "style-loader": "~0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "~1.14.0",
     "webpack-dev-server": "~1.16.2"
   }
