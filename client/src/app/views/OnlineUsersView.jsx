@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 
 import UsersList from './../components/online/UsersList';
 import OnlineUsersStore from './../stores/OnlineUsersStore';
+import WsClient from '../ws/WsClient';
 
 class OnlineUsersView extends React.Component {
 
@@ -18,6 +19,7 @@ class OnlineUsersView extends React.Component {
     }
 
     componentDidMount() {
+        WsClient.sendInfo({userName: 'Rezvan'});
         this.setState({
             users: OnlineUsersStore.getUsers()
         });

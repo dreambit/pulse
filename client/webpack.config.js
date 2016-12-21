@@ -40,7 +40,7 @@ module.exports = {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader"
       },
       {
-        test: /\.(png|gif|jpg)$/, loader: "url-loader?limit=10000"
+        test: /\.(png|gif|jpg)$/, loader: "url-loader?limit=10000&name=img/[hash].[ext]"
       }
     ]
   },
@@ -49,6 +49,8 @@ module.exports = {
       template: path.resolve(__dirname, 'src/app/index.html')
     }),
     new webpack.DefinePlugin({
-      WS_CONNECTION_URL: ':3000'
+      'process.env': {
+        'WS_CONNECTION_URL': '\"http://localhost:3000\"'
+      }
     })]
 }
