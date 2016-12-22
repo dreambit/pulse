@@ -47,6 +47,27 @@ export default flux.createStore({
             gender: Gender.FEMALE,
             level: 'Advanced',
             countryCode: 'us'
+        },
+        {
+            name: `Dreambitc`,
+            id: 7,
+            gender: Gender.MALE,
+            level: 'Upper-Intermediate',
+            countryCode: 'us'
+        },
+        {
+            name: `Loosy`,
+            id: 8,
+            gender: Gender.FEMALE,
+            level: 'Advanced',
+            countryCode: 'us'
+        },
+        {
+            name: `Loosy`,
+            id: 9,
+            gender: Gender.FEMALE,
+            level: 'Advanced',
+            countryCode: 'us'
         }
 
     ],

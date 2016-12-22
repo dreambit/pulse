@@ -23,7 +23,7 @@ class App extends React.Component {
             </NavItem>
           </Nav>
         </Navbar>
-        <Container>
+        <Container fluid>
           {this.props.children}
         </Container>
       </div>
