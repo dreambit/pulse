@@ -1,6 +1,6 @@
 import OnlineUserActions from './../../actions/OnlineUserActions';
 
 export default (data) => {
-  let user = JSON.parse(data);
-  OnlineUserActions.removeUser(user);
+  OnlineUserActions.removeUser(data);
+  console.log(`User left: ${JSON.stringify(data)}`);
 };

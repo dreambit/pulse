@@ -3,22 +3,28 @@ import io from 'socket.io-client';
 import WsMessageTypes from './WsMessageTypes';
 import handleNewUser from './handlers/NewUserHandler';
 import handleUserHasLeft from './handlers/UserHasLeftHandler';
+import handleUserUpdate from './handlers/UserInfoUpdateHandler';
+
+import { handleUserId, handleUsersList } from './handlers/UserHandler';
 
 /**
  * Class to handle websocket connection;
- * Handles online users, users mesages, calles etc.
+ * Handles online users, users messages, calls etc.
  */
 class WsClient {
 
   constructor() {
-    debugger;
     this.socket = io.connect(process.env.WS_CONNECTION_URL);
     this.attachListeners();
   }
 
   attachListeners() {
-    this.socket.on(WsMessageTypes.USER_NEW, (data) => handleNewUser(data));
-    this.socket.on(WsMessageTypes.USER_HAS_LEFT, (data) => handleUserHasLeft(data));
+    this.socket.on(WsMessageTypes.IN_USER_NEW, (data) => handleNewUser(data));
+    this.socket.on(WsMessageTypes.IN_USER_HAS_LEFT, (data) => handleUserHasLeft(data));
+    this.socket.on(WsMessageTypes.IN_OUT_USER_INFO_UPDATE, (data) => handleUserUpdate(data));
+    this.socket.on(WsMessageTypes.IN_USER_ID, (data) => handleUserId(data));
+
+    this.socket.on(WsMessageTypes.IN_USERS_LIST, (data) => handleUsersList(data));
   }
 
   /**
@@ -28,17 +34,13 @@ class WsClient {
    * @param userData
    */
   sendInfo(userData) {
-    this.socket.emit(WsMessageTypes.USER_INFO_NEW, userData);
+    this.socket.emit(WsMessageTypes.OUT_USER_INFO_NEW, userData);
   }
 
-  /**
-   * Sends message to selected user.
-   *
-   * @param user user to send message to
-   */
-  sendMessage(user) {
-
+  updateInfo(userData) {
+    this.socket.emit(WsMessageTypes.IN_OUT_USER_INFO_UPDATE, userData);
   }
+
 }
 
 export default new WsClient();

@@ -3,17 +3,28 @@ import { Collapse, Button, CardBlock, Card, FormGroup, Label, Input } from 'reac
 import { cloneDeep, extend } from 'lodash';
 import Gender from '../../common/Gender';
 
+import OnlineUserSettingsActions from '../../actions/OnlineUserSettingsActions';
+import OnlineUserSettingsStore from '../../stores/OnlineUserSettingsStore';
+
 export default class SettingsBar extends Component {
 
     static propTypes = {
-        settings: PropTypes.object.isRequired,
-        onChange: PropTypes.func.isRequired
     }
 
     state = {
         collapse: true,
-        settings: cloneDeep(this.props.settings)
+        settings: cloneDeep(OnlineUserSettingsStore.getSettings()),
+        timeout: undefined
     }
+
+    componentWillMount() {
+        OnlineUserSettingsStore.on('settings.setUserId', () => {
+            this.setState({
+                settings: cloneDeep(OnlineUserSettingsStore.getSettings())
+            })
+        })
+    }
+
 
     toggle = () => {
         this.setState({
@@ -21,12 +32,20 @@ export default class SettingsBar extends Component {
         });
     }
 
-    onGenderChange = (e) => {
-        let settings = extend({}, this.state.settings, {gender: e.target.value});
-        this.props.onChange(settings);
+    onNameChange = (e) => {
+        let settings = extend({}, this.state.settings, {userName: e.target.value});
         this.setState({
             settings: settings
         });
+        OnlineUserSettingsActions.setSettings(settings);
+    }
+
+    onGenderChange = (e) => {
+        let settings = extend({}, this.state.settings, {gender: e.target.value});
+        this.setState({
+            settings: settings
+        });
+        OnlineUserSettingsActions.setSettings(settings);
     }
 
 
@@ -38,7 +57,7 @@ export default class SettingsBar extends Component {
                     <Collapse isOpen={this.state.collapse} style={{padding: '20px'}}>
                         <FormGroup>
                             <Label>You name</Label>
-                            <Input placeholder="You name" />
+                            <Input placeholder="You name" value={this.state.settings.userName} onChange={this.onNameChange} />
                         </FormGroup>
                         <FormGroup>
                             <Label>Gender</Label>

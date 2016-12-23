@@ -23,6 +23,6 @@ module.exports = {
      * @param user
      */
     validateUser: (user) => {
-        return user.name;
+        return user.userName;
     }
 }

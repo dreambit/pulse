@@ -2,7 +2,11 @@ module.exports = {
     USER_INFO_NEW: 'USER_INFO_NEW',
     USER_INFO_UPDATE: 'USER_INFO_UPDATE',
     USER_NEW: 'USER_NEW',
-    USER_HAS_LEFT: 'USER_HAS_LEFT',
+    OUT_USER_HAS_LEFT: 'USER_HAS_LEFT',
+
+    //
+    OUT_USER_ID: 'USER_ID',
+    OUT_USERS_LIST: 'USERS_LIST',
 
     // making call
     INCOMING_CALL: 'INCOMING_CALL',

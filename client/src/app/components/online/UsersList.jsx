@@ -10,6 +10,7 @@ class UsersList extends React.Component {
         users: PropTypes.array.isRequired
     }
 
+
     render() {
         return (
             <Row className="users-list">

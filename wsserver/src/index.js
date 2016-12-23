@@ -3,7 +3,7 @@ var MessageTypes = require('./MessageTypes');
 var newUserHandler = require('./handlers/NewUserHandler');
 
 io.on('connection', function(socket) {
-    newUserHandler(socket);
+    newUserHandler(io, socket);
 });
 
 

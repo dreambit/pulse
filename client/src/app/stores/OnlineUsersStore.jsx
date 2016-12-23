@@ -1,87 +1,40 @@
 import flux from 'flux-react';
-import _ from 'lodash';
+import {find, remove, assign} from 'lodash';
 
 import Actions from './../actions/OnlineUserActions';
-import Gender from '../common/Gender';
 
 export default flux.createStore({
     users: [
-        {
-            name: `Rezvan`,
-            id: 1,
-            gender: Gender.MALE,
-            level: 'Intermediate',
-            countryCode: 'ru'
-        },
-        {
-            name: `Dreambitc`,
-            id: 2,
-            gender: Gender.MALE,
-            level: 'Upper-Intermediate',
-            countryCode: 'us'
-        },
-        {
-            name: `Loosy`,
-            id: 3,
-            gender: Gender.FEMALE,
-            level: 'Advanced',
-            countryCode: 'am'
-        },
-        {
-            name: `Rezvan`,
-            id: 4,
-            gender: Gender.MALE,
-            level: 'Intermediate',
-            countryCode: 'ru'
-        },
-        {
-            name: `Dreambitc`,
-            id: 5,
-            gender: Gender.MALE,
-            level: 'Upper-Intermediate',
-            countryCode: 'us'
-        },
-        {
-            name: `Loosy`,
-            id: 6,
-            gender: Gender.FEMALE,
-            level: 'Advanced',
-            countryCode: 'us'
-        },
-        {
-            name: `Dreambitc`,
-            id: 7,
-            gender: Gender.MALE,
-            level: 'Upper-Intermediate',
-            countryCode: 'us'
-        },
-        {
-            name: `Loosy`,
-            id: 8,
-            gender: Gender.FEMALE,
-            level: 'Advanced',
-            countryCode: 'us'
-        },
-        {
-            name: `Loosy`,
-            id: 9,
-            gender: Gender.FEMALE,
-            level: 'Advanced',
-            countryCode: 'us'
-        }
-
     ],
     actions: [
         Actions.addUser,
-        Actions.removeUser
+        Actions.removeUser,
+        Actions.updateUser,
+        Actions.setUsers
     ],
     addUser: function (user) {
       this.users.push(user);
       this.emit('users.add');
     },
     removeUser: function (user) {
-      _.remove(this.users, (u) => user.id == u.id);
+        debugger;
+
+      remove(this.users, (u) => user.id == u.id);
       this.emit('users.remove');
+    },
+    updateUser: function (userNewSettings) {
+        debugger;
+        let user = find(this.users, {id: userNewSettings.id});
+        if (user) {
+            assign(user, userNewSettings);
+            this.emit('users.update');
+        } else {
+            console.error(`Trying to assign, No such user: ${userNewSettings}`);
+        }
+    },
+    setUsers: function (users) {
+        this.users = users;
+        this.emit('users.add');
     },
     exports: {
       getUsers: function () {

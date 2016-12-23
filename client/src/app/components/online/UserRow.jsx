@@ -16,7 +16,7 @@ class UserRow extends React.Component {
                         this.props.user.gender === Gender.MALE ? <i className="icon fa fa-male" aria-hidden="true"></i>
                                                                : <i className="icon fa fa-female" aria-hidden="true"></i>
                     }
-                    <a href="#" className="user-link">{this.props.user.name}</a>
+                    <a href="#" className="user-link">{this.props.user.userName}</a>
                 </td>
                 <td className="text-center">
                     <span className={`famfamfam-flags flag ${this.props.user.countryCode}`}></span>
