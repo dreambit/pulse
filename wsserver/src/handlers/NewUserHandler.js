@@ -40,6 +40,15 @@ module.exports = function (io, socket) {
             console.log(`${MessageTypes.IN_MAKE_CALL}: ${userId}; Candidate not found!`);
         }
     });
+    socket.on(MessageTypes.IN_OUT_CALL_ANSWER, function (data) {
+        console.log(MessageTypes.IN_OUT_CALL_ANSWER + "11111111111111111");
+        let candidate = io.sockets.sockets[data.userId];
+        if (candidate) {
+            candidate.emit(MessageTypes.IN_OUT_CALL_ANSWER, data.answer);
+        } else {
+            console.log(`${MessageTypes.IN_OUT_END_CALL}: ${data.userId}; Candidate not found!`);
+        }
+    });
     socket.on(MessageTypes.IN_OUT_END_CALL, function (userId) {
         console.log(`${MessageTypes.IN_OUT_END_CALL}: ${userId}`);
         let candidate = io.sockets.sockets[userId];
@@ -49,6 +58,41 @@ module.exports = function (io, socket) {
             candidate.emit(MessageTypes.IN_OUT_END_CALL);
         } else {
             console.log(`${MessageTypes.IN_OUT_END_CALL}: ${userId}; Candidate not found!`);
+        }
+    });
+    socket.on(MessageTypes.IN_OUT_ICE_CANDIDATE, function (data) {
+        console.log(`${MessageTypes.IN_OUT_ICE_CANDIDATE}`);
+        console.log(data);
+
+        let candidate = io.sockets.sockets[data.userId];
+        if (candidate) {
+            console.log(`${MessageTypes.IN_OUT_ICE_CANDIDATE}`);
+            candidate.emit(MessageTypes.IN_OUT_ICE_CANDIDATE, data.ice);
+        } else {
+            console.log(`${MessageTypes.IN_OUT_ICE_CANDIDATE}: ${data.userId}; Candidate not found!`);
+        }
+    });
+    socket.on(MessageTypes.IN_OUT_OFFER, function (data) {
+        console.log(`${MessageTypes.IN_OUT_OFFER}`);
+        console.log(data);
+
+        let candidate = io.sockets.sockets[data.userId];
+        if (candidate) {
+            candidate.emit(MessageTypes.IN_OUT_OFFER, data.sdp);
+        } else {
+            console.log(`${MessageTypes.IN_OUT_OFFER}: ${data.userId}; Candidate not found!`);
+        }
+    });
+    socket.on(MessageTypes.IN_OUT_ANSWER, function (data) {
+        console.log(`${MessageTypes.IN_OUT_ANSWER}`);
+        console.log(data);
+
+        let candidate = io.sockets.sockets[data.userId];
+        if (candidate) {
+            console.log(`${MessageTypes.IN_OUT_ANSWER}`);
+            candidate.emit(MessageTypes.IN_OUT_ANSWER, data.sdp);
+        } else {
+            console.log(`${MessageTypes.IN_OUT_ANSWER}: ${data.userId}; Candidate not found!`);
         }
     });
     socket.on('disconnect', function () {

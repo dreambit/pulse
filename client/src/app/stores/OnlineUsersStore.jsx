@@ -17,13 +17,10 @@ export default flux.createStore({
       this.emit('users.add');
     },
     removeUser: function (user) {
-        debugger;
-
       remove(this.users, (u) => user.id == u.id);
       this.emit('users.remove');
     },
     updateUser: function (userNewSettings) {
-        debugger;
         let user = find(this.users, {id: userNewSettings.id});
         if (user) {
             assign(user, userNewSettings);

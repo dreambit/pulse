@@ -13,7 +13,7 @@ import CallStore from './../stores/CallStore';
 
 // ws
 import WsClient from '../ws/WsClient';
-import { makeCall } from '../ws/CallService';
+import { makeCall, sendCallAnswer } from '../ws/CallService';
 
 // utils
 import { validate as validateUser}  from '../common/UserUtils';
@@ -23,7 +23,8 @@ class OnlineUsersView extends React.Component {
     state = {
         users: [],
         isConnected: false,
-        isInCall: false
+        isInCall: false,
+        peerConnection: undefined
     }
 
     componentWillMount() {
@@ -57,6 +58,7 @@ class OnlineUsersView extends React.Component {
     onCallFrom = () => {
         console.log(CallStore.getCallType());
         console.log(CallStore.getCallFrom());
+
         this.setState({
             isInCall: true
         });

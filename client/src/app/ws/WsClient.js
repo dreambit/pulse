@@ -7,7 +7,7 @@ import handleUserUpdate from './handlers/UserInfoUpdateHandler';
 
 import { handleUserId, handleUsersList } from './handlers/UserHandler';
 
-import { handleIncomingCall, handleEndCall } from './handlers/CallHandlers';
+import { handleIncomingCall, handleEndCall, handleICECandidate, handleOffer, handleAnswer, handleCallAnswer } from './handlers/CallHandlers';
 
 /**
  * Class to handle websocket connection;
@@ -30,6 +30,11 @@ class WsClient {
 
     this.socket.on(WsMessageTypes.IN_INCOMING_CALL, (data) => handleIncomingCall(data));
     this.socket.on(WsMessageTypes.IN_OUT_END_CALL, () => handleEndCall());
+    this.socket.on(WsMessageTypes.IN_OUT_CALL_ANSWER, (data) => handleCallAnswer(data));
+
+    this.socket.on(WsMessageTypes.IN_OUT_ICE_CANDIDATE, (data) => handleICECandidate(data));
+    this.socket.on(WsMessageTypes.IN_OUT_OFFER, (data) => handleOffer(data));
+    this.socket.on(WsMessageTypes.IN_OUT_ANSWER, (data) => handleAnswer(data));
   }
 
   /**
@@ -54,6 +59,38 @@ class WsClient {
   endCall(userId) {
     console.log(`WsClient: End call ${userId}`);
     this.socket.emit(WsMessageTypes.IN_OUT_END_CALL, userId);
+  }
+
+  sendCallAnswer(userId, answer) {
+    console.log(`WsClient: sendCallAnswer ${userId}`);
+    this.socket.emit(WsMessageTypes.IN_OUT_CALL_ANSWER, {
+      userId: userId,
+      answer: answer
+    });
+  }
+
+  sendICECandidate(userId, ice) {
+    console.log(`WsClient: Send ICE to ${userId}`);
+    this.socket.emit(WsMessageTypes.IN_OUT_ICE_CANDIDATE, {
+      userId: userId,
+      ice: ice
+    });
+  }
+
+  createOffer(userId, sdp) {
+    console.log(`WsClient: createOffer to ${userId}`);
+    this.socket.emit(WsMessageTypes.IN_OUT_OFFER, {
+      userId: userId,
+      sdp: sdp
+    });
+  }
+
+  createAnswer(userId, sdp) {
+    console.log(`WsClient: createAnswer to ${userId}`);
+    this.socket.emit(WsMessageTypes.IN_OUT_ANSWER, {
+      userId: userId,
+      sdp: sdp
+    });
   }
 
   emit(message, data) {

@@ -7,11 +7,19 @@ export default flux.createStore({
   callFrom: undefined,
   callStatus: undefined,
   callType: undefined,
+  iceCandidate: [],
+  offer: undefined,
+  answer: undefined,
+  callAnswer: undefined,
 
   actions: [
     Actions.setCallTo,
     Actions.setCallFrom,
     Actions.setCallStatus,
+    Actions.setIceCandidate,
+    Actions.setOffer,
+    Actions.setAnswer,
+    Actions.setCallAnswer,
     Actions.reset
   ],
   setCallTo: function (user) {
@@ -28,11 +36,30 @@ export default flux.createStore({
     this.callStatus = callStatus;
     this.emit('call.status');
   },
+  setIceCandidate: function (ice) {
+    this.iceCandidate.push(ice);
+    this.emit('call.iceCandidate');
+  },
+  setOffer: function (offer) {
+    this.offer = offer;
+    this.emit('call.offer');
+  },
+  setAnswer: function (answer) {
+    this.answer = answer;
+    this.emit('call.answer');
+  },
+  setCallAnswer: function (answer) {
+    this.callAnswer = answer;
+    this.emit('call.callAnswer');
+  },
   reset: function () {
     this.callTo = undefined;
     this.callType = undefined;
     this.callFrom = undefined;
     this.callStatus = undefined;
+    this.iceCandidate = [];
+    this.offer = undefined;
+    this.answer = undefined;
     this.emit('call.reset');
   },
   exports: {
@@ -47,6 +74,18 @@ export default flux.createStore({
     },
     getCallType: function () {
       return this.callType;
+    },
+    getOffer: function () {
+      return this.offer;
+    },
+    getAnswer: function () {
+      return this.answer;
+    },
+    getIceCandidate: function () {
+      return this.iceCandidate;
+    },
+    getCallAnswer: function () {
+      return this.callAnswer
     }
   }
 });

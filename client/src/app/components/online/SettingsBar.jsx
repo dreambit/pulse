@@ -39,7 +39,6 @@ export default class SettingsBar extends Component {
     }
 
     onNameChange = (e) => {
-        debugger;
         let settings = extend({}, this.state.settings, {userName: e.target.value});
         this.setState({
             settings: settings

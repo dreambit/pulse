@@ -18,12 +18,28 @@ function handleEndCall() {
   CallActions.reset();
 }
 
+function handleCallAnswer(answer) {
+  console.log('Call Handler: handleCallAnswer');
+  CallActions.setCallAnswer(answer);
+}
+
 /**
  * ICE Candidate. Remote peer sent ICE candidate
  * @param ice ice description
  */
 function handleICECandidate(ice) {
+  console.log('Call Handler: handleICECandidate');
+  CallActions.setIceCandidate(ice);
+}
 
+function handleOffer(offer) {
+  console.log('Call Handler: handleOffer');
+  CallActions.setOffer(offer);
+}
+
+function handleAnswer(answer) {
+  console.log('Call Handler: handleAnswer');
+  CallActions.setAnswer(answer);
 }
 
 /**
@@ -34,4 +50,4 @@ function handleSDP(sdp) {
 
 }
 
-export { handleIncomingCall, handleEndCall, handleICECandidate, handleSDP }
+export { handleIncomingCall, handleEndCall, handleICECandidate, handleSDP, handleOffer, handleAnswer, handleCallAnswer }

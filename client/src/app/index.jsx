@@ -8,6 +8,9 @@ import FA from 'font-awesome/css/font-awesome.css';
 import FLAGS from 'famfamfam-flags/dist/sprite/famfamfam-flags.css';
 import Style from './style/index.scss';
 
+require('webrtc-adapter/out/adapter_no_edge.js');
+
+
 import routes from './routes/routes';
 
 render((
