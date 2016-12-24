@@ -1,7 +1,7 @@
 import flux from 'flux-react';
 import {find, remove, assign} from 'lodash';
 
-import Actions from './../actions/OnlineUserActions';
+import Actions from './../actions/OnlineUsersActions';
 
 export default flux.createStore({
     users: [

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Collapse, Button, CardBlock, Card, FormGroup, Label, Input } from 'reactstrap';
-import { cloneDeep, extend } from 'lodash';
+import { cloneDeep, extend, debounce } from 'lodash';
 import Gender from '../../common/Gender';
 
 import OnlineUserSettingsActions from '../../actions/OnlineUserSettingsActions';
@@ -9,6 +9,12 @@ import OnlineUserSettingsStore from '../../stores/OnlineUserSettingsStore';
 export default class SettingsBar extends Component {
 
     static propTypes = {
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.onNameChange = debounce(this.onNameChange, 1000);
     }
 
     state = {
@@ -33,11 +39,17 @@ export default class SettingsBar extends Component {
     }
 
     onNameChange = (e) => {
+        debugger;
         let settings = extend({}, this.state.settings, {userName: e.target.value});
         this.setState({
             settings: settings
         });
         OnlineUserSettingsActions.setSettings(settings);
+    }
+
+    onNameChangeDelayed = (e) => {
+        e.persist();
+        this.onNameChange(e);
     }
 
     onGenderChange = (e) => {
@@ -57,7 +69,7 @@ export default class SettingsBar extends Component {
                     <Collapse isOpen={this.state.collapse} style={{padding: '20px'}}>
                         <FormGroup>
                             <Label>You name</Label>
-                            <Input placeholder="You name" value={this.state.settings.userName} onChange={this.onNameChange} />
+                            <Input placeholder="You name" defaultValue={this.state.settings.userName} onChange={this.onNameChangeDelayed} />
                         </FormGroup>
                         <FormGroup>
                             <Label>Gender</Label>

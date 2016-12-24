@@ -5,7 +5,13 @@ import Gender from '../../common/Gender';
 class UserRow extends React.Component {
 
     static propTypes = {
-        user: PropTypes.object.isRequired
+        user: PropTypes.object.isRequired,
+        onUserCallClick: PropTypes.func.isRequired
+    }
+
+    onUserCallClick = (e) => {
+        e.preventDefault();
+        this.props.onUserCallClick(this.props.user);
     }
 
     render() {
@@ -41,7 +47,7 @@ class UserRow extends React.Component {
                 </td>
                 <td style={{width: '20%'}}>
                     <a href="#" className="table-link">
-                        <i className="fa fa-phone"></i>
+                        <i className="fa fa-phone" onClick={this.onUserCallClick}></i>
                     </a>
                     <a href="#" className="table-link">
                         <i className="fa fa-comments"></i>

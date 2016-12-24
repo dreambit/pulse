@@ -7,6 +7,8 @@ import handleUserUpdate from './handlers/UserInfoUpdateHandler';
 
 import { handleUserId, handleUsersList } from './handlers/UserHandler';
 
+import { handleIncomingCall, handleEndCall } from './handlers/CallHandlers';
+
 /**
  * Class to handle websocket connection;
  * Handles online users, users messages, calls etc.
@@ -14,6 +16,7 @@ import { handleUserId, handleUsersList } from './handlers/UserHandler';
 class WsClient {
 
   constructor() {
+    console.log('Ws Created');
     this.socket = io.connect(process.env.WS_CONNECTION_URL);
     this.attachListeners();
   }
@@ -23,8 +26,10 @@ class WsClient {
     this.socket.on(WsMessageTypes.IN_USER_HAS_LEFT, (data) => handleUserHasLeft(data));
     this.socket.on(WsMessageTypes.IN_OUT_USER_INFO_UPDATE, (data) => handleUserUpdate(data));
     this.socket.on(WsMessageTypes.IN_USER_ID, (data) => handleUserId(data));
-
     this.socket.on(WsMessageTypes.IN_USERS_LIST, (data) => handleUsersList(data));
+
+    this.socket.on(WsMessageTypes.IN_INCOMING_CALL, (data) => handleIncomingCall(data));
+    this.socket.on(WsMessageTypes.IN_OUT_END_CALL, () => handleEndCall());
   }
 
   /**
@@ -39,6 +44,20 @@ class WsClient {
 
   updateInfo(userData) {
     this.socket.emit(WsMessageTypes.IN_OUT_USER_INFO_UPDATE, userData);
+  }
+
+  makeCall(userId) {
+    console.log(`WsClient: Making call to ${userId}`);
+    this.socket.emit(WsMessageTypes.OUT_MAKE_CALL, userId);
+  }
+
+  endCall(userId) {
+    console.log(`WsClient: End call ${userId}`);
+    this.socket.emit(WsMessageTypes.IN_OUT_END_CALL, userId);
+  }
+
+  emit(message, data) {
+    this.socket.emit(message, data);
   }
 
 }

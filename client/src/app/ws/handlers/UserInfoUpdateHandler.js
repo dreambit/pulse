@@ -1,7 +1,7 @@
-import OnlineUserActions from './../../actions/OnlineUserActions';
+import OnlineUsersActions from './../../actions/OnlineUsersActions';
 
 export default (data) => {
-  OnlineUserActions.updateUser(data);
+  OnlineUsersActions.updateUser(data);
   console.log(`User update: ${JSON.stringify(data)}`);
   console.log();
 };

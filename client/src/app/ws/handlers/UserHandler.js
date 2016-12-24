@@ -1,5 +1,5 @@
 import OnlineUserSettingsActions from '../../actions/OnlineUserSettingsActions';
-import OnlineUserActions from './../../actions/OnlineUserActions';
+import OnlineUsersActions from './../../actions/OnlineUsersActions';
 
 export const handleUserId = (id) => {
   console.log(`handleUserId: ${JSON.stringify(id)}`);
@@ -8,5 +8,5 @@ export const handleUserId = (id) => {
 
 export const handleUsersList = (users) => {
   console.log(`Users list: ${JSON.stringify(users)}`);
-  OnlineUserActions.setUsers(users);
+  OnlineUsersActions.setUsers(users);
 }

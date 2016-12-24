@@ -7,7 +7,8 @@ import style from './UserList.scss';
 class UsersList extends React.Component {
 
     static propTypes = {
-        users: PropTypes.array.isRequired
+        users: PropTypes.array.isRequired,
+        onUserCallClick: PropTypes.func.isRequired
     }
 
 
@@ -31,7 +32,9 @@ class UsersList extends React.Component {
                                     </thead>
                                     <tbody>
                                     {
-                                        this.props.users.map(user => <UserRow key={user.id} user={user}></UserRow>)
+                                        this.props.users.map(user => <UserRow key={user.id} user={user} onUserCallClick={this.props.onUserCallClick}>
+
+                                                                      </UserRow>)
                                     }
                                     </tbody>
                                 </table>

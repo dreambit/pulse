@@ -9,8 +9,9 @@ module.exports = {
     OUT_USERS_LIST: 'USERS_LIST',
 
     // making call
-    INCOMING_CALL: 'INCOMING_CALL',
-    MAKE_CALL: 'MAKE_CALL',
+    OUT_INCOMING_CALL: 'INCOMING_CALL',
+    IN_OUT_END_CALL: 'END_CALL',
+    IN_MAKE_CALL: 'MAKE_CALL',
 
     // webrtc related events
     ICE_CANDIDATE: 'ICE_CANDIDATE',

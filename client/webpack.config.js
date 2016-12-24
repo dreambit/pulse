@@ -50,7 +50,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'WS_CONNECTION_URL': '\"http://localhost:3000\"'
+        'WS_CONNECTION_URL': '\"http://192.168.1.43:3000\"'
       }
     })]
 }

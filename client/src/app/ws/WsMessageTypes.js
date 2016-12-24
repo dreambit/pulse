@@ -27,5 +27,10 @@ export default {
   /**
    * Out action: Update you settings like an username, your level
    */
-  IN_OUT_USER_INFO_UPDATE: 'USER_INFO_UPDATE'
+  IN_OUT_USER_INFO_UPDATE: 'USER_INFO_UPDATE',
+
+  IN_INCOMING_CALL: 'INCOMING_CALL',
+
+  OUT_MAKE_CALL: 'MAKE_CALL',
+  IN_OUT_END_CALL: 'END_CALL'
 }

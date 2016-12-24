@@ -1,6 +1,6 @@
-import OnlineUserActions from './../../actions/OnlineUserActions';
+import OnlineUsersActions from './../../actions/OnlineUsersActions';
 
 export default (data) => {
-  OnlineUserActions.addUser(data);
+  OnlineUsersActions.addUser(data);
   console.log(`New user: ${JSON.stringify(data)}`);
 };

@@ -1,21 +1,29 @@
 import React, {PropTypes} from 'react';
-import { Row, Col } from 'reactstrap';
 
-import UsersList from './../components/online/UsersList';
+// view components
+import CallComponent from '../components/online/CallComponent';
+import OnlineUsersComponent from '../components/online/OnlineUsersComponent';
+
+// stores && actions
 import OnlineUsersStore from './../stores/OnlineUsersStore';
-import WsClient from '../ws/WsClient';
-import SettingsBar from '../components/online/SettingsBar';
-import OnlineUserActions from './../actions/OnlineUserActions';
-
+import OnlineUsersActions from './../actions/OnlineUsersActions';
 import OnlineUserSettingsStore from '../stores/OnlineUserSettingsStore';
 
+import CallStore from './../stores/CallStore';
+
+// ws
+import WsClient from '../ws/WsClient';
+import { makeCall } from '../ws/CallService';
+
+// utils
 import { validate as validateUser}  from '../common/UserUtils';
 
 class OnlineUsersView extends React.Component {
 
     state = {
         users: [],
-        isConnected: false
+        isConnected: false,
+        isInCall: false
     }
 
     componentWillMount() {
@@ -29,12 +37,41 @@ class OnlineUsersView extends React.Component {
         OnlineUserSettingsStore.on('settings.setAll', () => {
             this.onSettingsChange();
         });
+        CallStore.on('call.callTo', this.onCallTo);
+        CallStore.on('call.callFrom', this.onCallFrom);
+        CallStore.on('call.reset', this.onCallEnd);
     }
 
     componentDidMount() {
         this.setState({
             users: OnlineUsersStore.getUsers()
         });
+    }
+
+    onCallTo = () => {
+        this.setState({
+            isInCall: true
+        });
+    }
+
+    onCallFrom = () => {
+        console.log(CallStore.getCallType());
+        console.log(CallStore.getCallFrom());
+        this.setState({
+            isInCall: true
+        });
+    }
+
+    onCallEnd = () => {
+        this.setState({
+            isInCall: false
+        });
+    }
+
+    onUserCallClick = (user) => {
+        console.log(`Call acquired to`);
+        console.log(user);
+        makeCall(user);
     }
 
     onSettingsChange = () => {
@@ -48,11 +85,11 @@ class OnlineUsersView extends React.Component {
             if (this.state.isConnected) {
                 console.log(`Updating settings: ${JSON.stringify(settings)}`);
                 WsClient.updateInfo(settings);
-                OnlineUserActions.updateUser(settings);
+                OnlineUsersActions.updateUser(settings);
             } else {
                 console.log(`Sending new settings: ${JSON.stringify(settings)}`);
                 WsClient.sendInfo(settings);
-                OnlineUserActions.addUser(settings);
+                OnlineUsersActions.addUser(settings);
                 this.setState({
                     isConnected: true
                 });
@@ -62,14 +99,8 @@ class OnlineUsersView extends React.Component {
 
     render() {
         return (
-            <Row style={{paddingTop: '50px'}}>
-                <Col lg="2">
-                    <SettingsBar/>
-                </Col>
-                <Col lg="9">
-                    <UsersList users={this.state.users}></UsersList>
-                </Col>
-            </Row>
+                this.state.isInCall ? <CallComponent />
+                                    : <OnlineUsersComponent users={this.state.users} onUserCallClick={this.onUserCallClick} />
         );
     }
 }
