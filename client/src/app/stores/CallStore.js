@@ -1,6 +1,21 @@
 import flux from 'flux-react';
 import Actions from './../actions/CallActions';
 
+const CALL_TYPE = {
+  IN: 'IN',
+  OUT: 'OUT'
+}
+
+const CALL_STATUS = {
+  INCOMING_CALL: 'INCOMING_CALL',
+  WAITING_FOR_ANSWER: 'WAITING_FOR_ANSWER',
+  ANSWER_ACCEPT: 'ANSWER_ACCEPT',
+  WAITING_RTC_OFFER: 'WAITING_RTC_OFFER',
+  WAITING_RTC_ANSWER: 'WAITING_RTC_ANSWER',
+  CONNECTING: 'CONNECTING',
+  ACTIVE: 'ACTIVE'
+}
+
 export default flux.createStore({
 
   callTo: undefined,
@@ -24,13 +39,13 @@ export default flux.createStore({
   ],
   setCallTo: function (user) {
     this.callTo = user;
-    this.callType = 'OUT';
+    this.callType = CALL_TYPE.OUT;
     this.emit('call.callTo');
   },
   setCallFrom: function (user) {
     this.callFrom = user;
     this.emit('call.callFrom');
-    this.callType = 'IN';
+    this.callType = CALL_TYPE.IN;
   },
   setCallStatus: function (callStatus) {
     this.callStatus = callStatus;
@@ -89,4 +104,6 @@ export default flux.createStore({
     }
   }
 });
+
+export {CALL_STATUS, CALL_TYPE}
 

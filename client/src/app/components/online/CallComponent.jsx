@@ -3,10 +3,11 @@ import { Row, Col, Button } from 'reactstrap';
 import { forEach } from 'lodash';
 
 import InCallUserComponent from './InCallUserComponent';
+import AcceptDeclineCallControls from './AcceptDeclineCallControls';
 
 import { makeCall, endCall, sendICECandidate, createOffer, createAnswer, sendCallAnswer } from '../../ws/CallService';
 
-import CallStore from '../../stores/CallStore';
+import CallStore, {CALL_STATUS} from '../../stores/CallStore';
 import CallActions from '../../actions/CallActions';
 
 import style from './CallComponent.scss';
@@ -15,16 +16,11 @@ import userIcon from '../../../img/account.png';
 class CallComponent extends Component {
 
     static propTypes = {
-
-    }
-
-    static defaultProps = {
-
+        isInitiator: PropTypes.bool.isRequired
     }
 
     state = {
-        connectionStatus: 'Connecting...',
-        peerConnection: undefined
+        status: this.props.isInitiator ? CALL_STATUS.WAITING_FOR_ANSWER : CALL_STATUS.INCOMING_CALL
     }
 
     componentWillMount() {
@@ -153,6 +149,27 @@ class CallComponent extends Component {
         console.log(error);
     }
 
+    // i accept the call
+    onAccept = () => {
+        navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(this.onMediaSuccess).catch(this.onMediaFailure);
+    }
+
+    onDecline = () => {
+
+    }
+
+    renderControls = () => {
+        return (
+            <Col lg={{ size: 6, push: 3, pull: 3 }} style={{textAlign: 'center'}}>
+                {
+                    this.state.status === CALL_STATUS.INCOMING_CALL
+                        ? <AcceptDeclineCallControls onAccept={this.onAccept} onDecline={this.onDecline}/>
+                        : <Button color="danger" onClick={this.endCall}>End Call</Button>
+                }
+            </Col>
+        );
+    }
+
     render() {
         return (
             <div>
@@ -170,9 +187,9 @@ class CallComponent extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col lg={{ size: 6, push: 3, pull: 3 }} style={{textAlign: 'center'}}>
-                        <Button color="danger" onClick={this.endCall}>End Call</Button>
-                    </Col>
+                    {
+                        this.renderControls()
+                    }
                 </Row>
             </div>
 

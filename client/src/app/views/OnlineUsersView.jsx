@@ -2,6 +2,8 @@ import React, {PropTypes} from 'react';
 
 // view components
 import CallComponent from '../components/online/CallComponent';
+import IncomingCallComponent from '../components/online/IncomingCallComponent';
+import OutgoingCallComponent from '../components/online/OutgoingCallComponent';
 import OnlineUsersComponent from '../components/online/OnlineUsersComponent';
 
 // stores && actions
@@ -9,7 +11,7 @@ import OnlineUsersStore from './../stores/OnlineUsersStore';
 import OnlineUsersActions from './../actions/OnlineUsersActions';
 import OnlineUserSettingsStore from '../stores/OnlineUserSettingsStore';
 
-import CallStore from './../stores/CallStore';
+import CallStore, { CALL_TYPE } from './../stores/CallStore';
 
 // ws
 import WsClient from '../ws/WsClient';
@@ -24,7 +26,8 @@ class OnlineUsersView extends React.Component {
         users: [],
         isConnected: false,
         isInCall: false,
-        peerConnection: undefined
+        callType: undefined,
+        callTo: undefined
     }
 
     componentWillMount() {
@@ -38,7 +41,6 @@ class OnlineUsersView extends React.Component {
         OnlineUserSettingsStore.on('settings.setAll', () => {
             this.onSettingsChange();
         });
-        CallStore.on('call.callTo', this.onCallTo);
         CallStore.on('call.callFrom', this.onCallFrom);
         CallStore.on('call.reset', this.onCallEnd);
     }
@@ -49,31 +51,30 @@ class OnlineUsersView extends React.Component {
         });
     }
 
-    onCallTo = () => {
-        this.setState({
-            isInCall: true
-        });
-    }
-
     onCallFrom = () => {
-        console.log(CallStore.getCallType());
-        console.log(CallStore.getCallFrom());
-
         this.setState({
-            isInCall: true
+            isInCall: true,
+            callType: CALL_TYPE.IN
         });
     }
 
     onCallEnd = () => {
         this.setState({
-            isInCall: false
+            isInCall: false,
+            callType: undefined,
+            callTo: undefined
         });
     }
 
     onUserCallClick = (user) => {
         console.log(`Call acquired to`);
         console.log(user);
-        makeCall(user);
+
+        this.setState({
+            isInCall: true,
+            callType: CALL_TYPE.OUT,
+            callTo: user
+        });
     }
 
     onSettingsChange = () => {
@@ -100,10 +101,16 @@ class OnlineUsersView extends React.Component {
     }
 
     render() {
-        return (
-                this.state.isInCall ? <CallComponent />
-                                    : <OnlineUsersComponent users={this.state.users} onUserCallClick={this.onUserCallClick} />
-        );
+        if (this.state.isInCall) {
+            if (this.state.callType === CALL_TYPE.IN) {
+                return <IncomingCallComponent />
+            } else {
+                return <OutgoingCallComponent to={this.state.callTo} />
+            }
+        } else {
+            return <OnlineUsersComponent users={this.state.users} onUserCallClick={this.onUserCallClick} />
+        }
+
     }
 }
 
