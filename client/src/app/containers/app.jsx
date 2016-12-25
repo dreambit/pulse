@@ -19,7 +19,7 @@ class App extends React.Component {
               <NavLink tag={Link} to="/online">Dashboard</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
+                <NavLink tag={Link} to="/">Main</NavLink>
             </NavItem>
           </Nav>
         </Navbar>

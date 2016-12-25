@@ -4,8 +4,9 @@ module.exports = {
     USER_NEW: 'USER_NEW',
     OUT_USER_HAS_LEFT: 'USER_HAS_LEFT',
 
-    //
+    // you were given an id
     OUT_USER_ID: 'USER_ID',
+    // send users list to connected user
     OUT_USERS_LIST: 'USERS_LIST',
 
     // making call
