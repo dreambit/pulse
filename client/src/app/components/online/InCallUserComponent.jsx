@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import style from './InCallUserComponent.scss';
-import userIcon from '../../../img/account.png';
+require('./InCallUserComponent.scss');
 
 class InCallUserComponent extends Component {
 
@@ -11,9 +10,8 @@ class InCallUserComponent extends Component {
 
     render() {
         return (
-            <h2 style={{display: 'inline-block'}} className="text-center">
-                <img width={180} height={180} src={userIcon} />
-                <br />
+            <h2 style={{display: 'inline-block'}} className="incall-user-component">
+                <div className="user-icon"/>
                 <span>{this.props.userName}</span>
             </h2>
 

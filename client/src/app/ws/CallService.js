@@ -8,19 +8,17 @@ function makeCall(user) {
 
   WsClient.makeCall(user.id);
   CallActions.setCallTo(user);
-
 }
 
 function endCall() {
   let user = CallStore.getCallType() == 'IN' ? CallStore.getCallFrom()
                                              : CallStore.getCallTo();
 
-  console.log('Call service: End call');
+  console.log('CallService: End call');
   console.log(user);
 
   WsClient.endCall(user.id);
   CallActions.reset();
-
 }
 
 function sendCallAnswer(answer) {

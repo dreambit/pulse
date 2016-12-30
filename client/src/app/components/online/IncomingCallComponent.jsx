@@ -1,7 +1,9 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
+import { Row, Col, Button } from 'reactstrap';
+import { forEach } from 'lodash';
 
-import CallStore, {CALL_STATUS} from '../../stores/CallStore';
-import { makeCall, endCall, sendICECandidate, createOffer, createAnswer, sendCallAnswer } from '../../ws/CallService';
+import CallStore, { CALL_STATUS } from '../../stores/CallStore';
+import { endCall, sendICECandidate, createAnswer, sendCallAnswer } from '../../ws/CallService';
 import CallActions from '../../actions/CallActions';
 
 import InCallUserComponent from './InCallUserComponent';
@@ -21,6 +23,7 @@ class IncomingCallComponent extends Component {
     componentWillUnmount() {
         CallStore.off('call.iceCandidate', this.onIceCandidate);
         CallStore.off('call.offer', this.onOffer);
+        this.releaseConnection();
     }
 
     componentDidMount() {
@@ -33,6 +36,7 @@ class IncomingCallComponent extends Component {
 
         this.pc.onaddstream = (evt) => {
             console.log('UI: On Remote stream');
+            console.log(evt);
             this.remoteAudio.src = URL.createObjectURL(evt.stream);
         };
     }
@@ -115,15 +119,11 @@ class IncomingCallComponent extends Component {
     }
 
     releaseConnection = () => {
-        this.remoteAudio.getTracks().forEach ((track) => {
-            track.stop();
-        });
         this.pc.close();
         this.pc = null;
     }
 
     hangUp = () => {
-        this.releaseConnection();
         endCall();
     }
 
@@ -156,7 +156,9 @@ class IncomingCallComponent extends Component {
                 </Row>
                 <Row>
                     <Col lg={{ size: 6, push: 3, pull: 3 }}>
-                        <Button color="danger" onClick={this.hangUp}>End Call</Button>
+                        <div className="text-center">
+                            <Button color="danger" onClick={this.hangUp}>End Call</Button>
+                        </div>
                     </Col>
                 </Row>
             </div>

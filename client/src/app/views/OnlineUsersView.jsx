@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 
 // view components
-import CallComponent from '../components/online/CallComponent';
 import IncomingCallComponent from '../components/online/IncomingCallComponent';
 import OutgoingCallComponent from '../components/online/OutgoingCallComponent';
 import OnlineUsersComponent from '../components/online/OnlineUsersComponent';
@@ -15,7 +14,6 @@ import CallStore, { CALL_TYPE } from './../stores/CallStore';
 
 // ws
 import WsClient from '../ws/WsClient';
-import { makeCall, sendCallAnswer } from '../ws/CallService';
 
 // utils
 import { validate as validateUser}  from '../common/UserUtils';

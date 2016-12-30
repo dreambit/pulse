@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Button } from 'reactstrap';
 
 class AcceptDeclineCallControls extends Component {
 
@@ -9,10 +10,10 @@ class AcceptDeclineCallControls extends Component {
 
     render() {
         return (
-            <span>
+            <div className="text-center">
                 <Button color="success" onClick={this.props.onAccept}>Accept call</Button>
                 <Button color="danger" onClick={this.props.onDecline}>Decline call</Button>
-            </span>
+            </div>
         );
     }
 }

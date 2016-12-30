@@ -1,5 +1,9 @@
 .incall-user-component {
-  .text-center {
-    text-align: center;
+  text-align: center;
+  .user-icon {
+    width: 180px;
+    height: 180px;
+    background-image: url('../../../img/account.png');
+    background-size: 100%;
   }
 }
