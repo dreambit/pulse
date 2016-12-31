@@ -122,6 +122,7 @@ class OutgoingCallComponent extends Component {
     onMediaSuccess = (stream) => {
         console.log('Get media success');
         this.pc.addStream(stream);
+        this.localStream = stream;
 
         makeCall(this.props.to);
 
@@ -135,6 +136,11 @@ class OutgoingCallComponent extends Component {
     }
 
     releaseConnection = () => {
+        if (this.localStream) {
+            this.localStream.getTracks().forEach((track) => {
+                track.stop();
+            });
+        }
         this.pc.close();
         this.pc = null;
     }

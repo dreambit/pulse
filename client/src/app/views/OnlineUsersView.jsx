@@ -30,20 +30,26 @@ class OnlineUsersView extends React.Component {
 
     componentWillMount() {
         // listen for new users, etc
-        OnlineUsersStore.on('users.*', () => {
-            this.setState({
-                users: OnlineUsersStore.getUsers()
-            });
-        });
-        // listen for settings update
-        OnlineUserSettingsStore.on('settings.setAll', () => {
-            this.onSettingsChange();
-        });
+        OnlineUsersStore.on('users.*', this.onUsersUpdate);
+        OnlineUserSettingsStore.on('settings.setAll', this.onSettingsChange);
         CallStore.on('call.callFrom', this.onCallFrom);
         CallStore.on('call.reset', this.onCallEnd);
     }
 
     componentDidMount() {
+        this.setState({
+            users: OnlineUsersStore.getUsers()
+        });
+    }
+
+    componentWillUnmount() {
+        OnlineUsersStore.off('users.*', this.onUsersUpdate);
+        OnlineUserSettingsStore.off('settings.setAll', this.onSettingsChange);
+        CallStore.off('call.callFrom', this.onCallFrom);
+        CallStore.off('call.reset', this.onCallEnd);
+    }
+
+    onUsersUpdate = () => {
         this.setState({
             users: OnlineUsersStore.getUsers()
         });

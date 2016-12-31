@@ -25,8 +25,6 @@ class UsersList extends React.Component {
                                         <th className="left"><span>Nick</span></th>
                                         <th><span>Country</span></th>
                                         <th><span>Level</span></th>
-                                        <th><span>Favorite topics</span></th>
-                                        <th><span>Contacts</span></th>
                                         <th><span>Actions</span></th>
                                     </tr>
                                     </thead>

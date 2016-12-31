@@ -93,6 +93,7 @@ class IncomingCallComponent extends Component {
     onMediaSuccess = (stream) => {
         console.log('Get media success');
         this.pc.addStream(stream);
+        this.localStream = stream;
 
         sendCallAnswer(true);
 
@@ -119,6 +120,11 @@ class IncomingCallComponent extends Component {
     }
 
     releaseConnection = () => {
+        if (this.localStream) {
+            this.localStream.getTracks().forEach((track) => {
+                track.stop();
+            });
+        }
         this.pc.close();
         this.pc = null;
     }
