@@ -7,31 +7,24 @@ var _ = require('lodash');
 module.exports = function (io, socket) {
     console.log(`Connection: ${socket.id}`);
 
+    socket['data'] = {id: socket.id};
     // assign user id to connected user
     socket.emit(MessageTypes.OUT_USER_ID, socket.id);
+
     // send all connected users list to connected user
     socket.emit(MessageTypes.OUT_USERS_LIST, _.chain(io.sockets.sockets)
                                               .filter((val) => socket.id != val.id)  // do not send itself
                                               .map((v) => v['data'])
-                                              .filter()                              // do not send empty users
                                               .value());
 
-    // user has sent settings for first time, like userName, level, etc.
-    socket.on(MessageTypes.USER_INFO_NEW, function (data) {
-        console.log(`${MessageTypes.USER_INFO_NEW}: ${data}`);
-        if (utils.validateUser(data)) {
-            socket['data'] = data;
-            socket.broadcast.emit(MessageTypes.USER_NEW, data);
-        }
-    });
+    // notify all users about new one
+    socket.broadcast.emit(MessageTypes.USER_NEW, {id: socket.id});
 
     // user has updated his settings like userName, level etc.
     socket.on(MessageTypes.USER_INFO_UPDATE, function (data) {
         console.log(`${MessageTypes.USER_INFO_UPDATE}: ${data}`);
-        if (utils.validateUser(data)) {
-            socket['data'] = data;
-            socket.broadcast.emit(MessageTypes.USER_INFO_UPDATE, data);
-        }
+        socket['data'] = data;
+        socket.broadcast.emit(MessageTypes.USER_INFO_UPDATE, data);
     });
 
     // user is making call to the user with id(userId)

@@ -11,10 +11,6 @@ class OnlineUsersComponent extends Component {
         onUserCallClick: PropTypes.func.isRequired
     }
 
-    static defaultProps = {
-
-    }
-
     render() {
         return (
             <Row style={{paddingTop: '50px'}}>

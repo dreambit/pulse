@@ -1,15 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { Collapse, Button, CardBlock, Card, FormGroup, Label, Input } from 'reactstrap';
-import { cloneDeep, extend, debounce } from 'lodash';
-import Gender from '../../common/Gender';
+import { Collapse, FormGroup, Label, Input } from 'reactstrap';
+import { clone, debounce, set } from 'lodash';
 
-import OnlineUserSettingsActions from '../../actions/OnlineUserSettingsActions';
-import OnlineUserSettingsStore from '../../stores/OnlineUserSettingsStore';
+import Gender from '../../common/Gender';
+import UserActions from '../../actions/UserActions';
+import UserStore from '../../stores/UserStore';
 
 export default class SettingsBar extends Component {
-
-    static propTypes = {
-    }
 
     constructor(props) {
         super(props);
@@ -19,18 +16,8 @@ export default class SettingsBar extends Component {
 
     state = {
         collapse: true,
-        settings: cloneDeep(OnlineUserSettingsStore.getSettings()),
-        timeout: undefined
+        user: clone(UserStore.getUser())
     }
-
-    componentWillMount() {
-        OnlineUserSettingsStore.on('settings.setUserId', () => {
-            this.setState({
-                settings: cloneDeep(OnlineUserSettingsStore.getSettings())
-            })
-        })
-    }
-
 
     toggle = () => {
         this.setState({
@@ -39,11 +26,12 @@ export default class SettingsBar extends Component {
     }
 
     onNameChange = (e) => {
-        let settings = extend({}, this.state.settings, {userName: e.target.value});
+        let userName = e.target.value;
+
         this.setState({
-            settings: settings
+            user: set(this.state.user, 'userName', userName)
         });
-        OnlineUserSettingsActions.setSettings(settings);
+        UserActions.setUserName(userName);
     }
 
     onNameChangeDelayed = (e) => {
@@ -52,11 +40,30 @@ export default class SettingsBar extends Component {
     }
 
     onGenderChange = (e) => {
-        let settings = extend({}, this.state.settings, {gender: e.target.value});
+        let gender = e.target.value;
+
         this.setState({
-            settings: settings
+            user: set(this.state.user, 'gender', gender)
         });
-        OnlineUserSettingsActions.setSettings(settings);
+        UserActions.setUserGender(gender);
+    }
+
+    onLevelChange = (e) => {
+        let level = e.target.value;
+
+        this.setState({
+            user: set(this.state.user, 'level', level)
+        });
+        UserActions.setUserLevel(level);
+    }
+
+    onCountryChange = (e) => {
+        let countryCode = e.target.value;
+
+        this.setState({
+            user: set(this.state.user, 'countryCode', countryCode)
+        });
+        UserActions.setUserCountryCode(countryCode);
     }
 
 
@@ -72,18 +79,18 @@ export default class SettingsBar extends Component {
                         <div style={{padding: '20px'}}>
                             <FormGroup>
                                 <Label>You name</Label>
-                                <Input placeholder="You name" defaultValue={this.state.settings.userName} onChange={this.onNameChangeDelayed} />
+                                <Input placeholder="You name" defaultValue={this.state.user.userName} onChange={this.onNameChangeDelayed} />
                             </FormGroup>
                             <FormGroup>
                                 <Label>Gender</Label>
-                                <Input type="select" onChange={this.onGenderChange} value={this.state.settings.gender}>
+                                <Input type="select" onChange={this.onGenderChange} value={this.state.user.gender}>
                                     <option value={Gender.MALE}>Male</option>
                                     <option value={Gender.FEMALE}>Female</option>
                                 </Input>
                             </FormGroup>
                             <FormGroup>
                                 <Label>Level</Label>
-                                <Input type="select">
+                                <Input type="select" onChange={this.onLevelChange} value={this.state.user.level}>
                                     <option>Beginner</option>
                                     <option>Pre-Intermediate</option>
                                     <option>Intermediate</option>
@@ -93,12 +100,12 @@ export default class SettingsBar extends Component {
                             </FormGroup>
                             <FormGroup>
                                 <Label>Country</Label>
-                                <Input type="select">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                <Input type="select" onChange={this.onCountryChange} value={this.state.user.countryCode}>
+                                    <option>us</option>
+                                    <option>ru</option>
+                                    <option>ch</option>
+                                    <option>gb</option>
+                                    <option>sp</option>
                                 </Input>
                             </FormGroup>
                         </div>

@@ -8,21 +8,17 @@ import OnlineUsersComponent from '../components/online/OnlineUsersComponent';
 // stores && actions
 import OnlineUsersStore from './../stores/OnlineUsersStore';
 import OnlineUsersActions from './../actions/OnlineUsersActions';
-import OnlineUserSettingsStore from '../stores/OnlineUserSettingsStore';
+import UserStore from '../stores/UserStore';
 
 import CallStore, { CALL_TYPE } from './../stores/CallStore';
 
 // ws
 import WsClient from '../ws/WsClient';
 
-// utils
-import { validate as validateUser}  from '../common/UserUtils';
-
 class OnlineUsersView extends React.Component {
 
     state = {
         users: [],
-        isConnected: false,
         isInCall: false,
         callType: undefined,
         callTo: undefined
@@ -31,7 +27,7 @@ class OnlineUsersView extends React.Component {
     componentWillMount() {
         // listen for new users, etc
         OnlineUsersStore.on('users.*', this.onUsersUpdate);
-        OnlineUserSettingsStore.on('settings.setAll', this.onSettingsChange);
+        UserStore.on('user.*', this.onUserChange);
         CallStore.on('call.callFrom', this.onCallFrom);
         CallStore.on('call.reset', this.onCallEnd);
     }
@@ -44,7 +40,7 @@ class OnlineUsersView extends React.Component {
 
     componentWillUnmount() {
         OnlineUsersStore.off('users.*', this.onUsersUpdate);
-        OnlineUserSettingsStore.off('settings.setAll', this.onSettingsChange);
+        UserStore.off('user.*', this.onUserChange);
         CallStore.off('call.callFrom', this.onCallFrom);
         CallStore.off('call.reset', this.onCallEnd);
     }
@@ -81,27 +77,8 @@ class OnlineUsersView extends React.Component {
         });
     }
 
-    onSettingsChange = () => {
-        let settings = OnlineUserSettingsStore.getSettings();
-
-        // check user settings
-        if (!validateUser(settings)) {
-            console.log(`You settings are not valid: ${JSON.stringify(settings)}`);
-        } else {
-            // if user is in list
-            if (this.state.isConnected) {
-                console.log(`Updating settings: ${JSON.stringify(settings)}`);
-                WsClient.updateInfo(settings);
-                OnlineUsersActions.updateUser(settings);
-            } else {
-                console.log(`Sending new settings: ${JSON.stringify(settings)}`);
-                WsClient.sendInfo(settings);
-                OnlineUsersActions.addUser(settings);
-                this.setState({
-                    isConnected: true
-                });
-            }
-        }
+    onUserChange = () => {
+        WsClient.updateInfo(UserStore.getUser());
     }
 
     render() {

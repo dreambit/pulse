@@ -1,4 +1,4 @@
-import OnlineUserSettingsActions from '../../actions/OnlineUserSettingsActions';
+import OnlineUserSettingsActions from '../../actions/UserActions';
 import OnlineUsersActions from './../../actions/OnlineUsersActions';
 
 export const handleUserId = (id) => {
