@@ -1,7 +1,7 @@
 import flux from 'flux-react';
 import Actions from '../actions/UserActions';
 import { clone } from 'lodash';
-import Gender from '../common/Gender';
+
 import Level from '../common/Level';
 
 export default flux.createStore({
@@ -9,7 +9,7 @@ export default flux.createStore({
     id: undefined,
     userName: undefined,
     countryCode: undefined,
-    gender: Gender.MALE,
+    gender: undefined,
     level: Level.BEGINNER
   },
   actions: [

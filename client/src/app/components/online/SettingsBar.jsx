@@ -84,6 +84,7 @@ export default class SettingsBar extends Component {
                             <FormGroup>
                                 <Label>Gender</Label>
                                 <Input type="select" onChange={this.onGenderChange} value={this.state.user.gender}>
+                                    <option value=""></option>
                                     <option value={Gender.MALE}>Male</option>
                                     <option value={Gender.FEMALE}>Female</option>
                                 </Input>

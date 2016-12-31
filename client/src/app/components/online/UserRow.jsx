@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react'
-import { Tag } from 'reactstrap';
 import Gender from '../../common/Gender';
 
 class UserRow extends React.Component {
@@ -14,13 +13,24 @@ class UserRow extends React.Component {
         this.props.onUserCallClick(this.props.user);
     }
 
+    renderGenderIcon = () => {
+        if (this.props.user.gender) {
+            if (this.props.user.gender === Gender.MALE) {
+                return <i className="icon fa fa-male" aria-hidden="true"></i>
+            } else {
+                return <i className="icon fa fa-female" aria-hidden="true"></i>
+            }
+        } else {
+            return <i className="icon fa fa-reddit-alien" aria-hidden="true"></i>
+        }
+    }
+
     render() {
         return (
             <tr>
                 <td className="left">
                     {
-                        this.props.user.gender === Gender.MALE ? <i className="icon fa fa-male" aria-hidden="true"></i>
-                                                               : <i className="icon fa fa-female" aria-hidden="true"></i>
+                        this.renderGenderIcon()
                     }
                     <a href="#" className="user-link">{this.props.user.userName}</a>
                 </td>

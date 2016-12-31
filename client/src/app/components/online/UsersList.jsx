@@ -1,8 +1,13 @@
 import React, {PropTypes} from 'react'
-import {Container, Row, Col} from 'reactstrap';
+import { Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { chain } from 'lodash';
 
 import UserRow from './UserRow';
-import style from './UserList.scss';
+
+// style
+require('./UserList.scss');
+
+const PAGE_SIZE = 10;
 
 class UsersList extends React.Component {
 
@@ -11,6 +16,27 @@ class UsersList extends React.Component {
         onUserCallClick: PropTypes.func.isRequired
     }
 
+    state = {
+        index: 0
+    }
+
+    onNextClick = () => {
+        let nextIndex = this.state.index + PAGE_SIZE;
+
+        if (nextIndex < this.props.users.length) {
+            this.setState({
+                index: nextIndex
+            });
+        }
+    }
+
+    onPrevClick = () => {
+        if (this.state.index !== 0) {
+            this.setState({
+                index: this.state.index - PAGE_SIZE
+            });
+        }
+    }
 
     render() {
         return (
@@ -30,15 +56,28 @@ class UsersList extends React.Component {
                                     </thead>
                                     <tbody>
                                     {
-                                        this.props.users.map(user => <UserRow key={user.id} user={user} onUserCallClick={this.props.onUserCallClick}>
-
-                                                                      </UserRow>)
+                                        chain(this.props.users).slice(this.state.index, this.state.index + PAGE_SIZE)
+                                                               .map(user => <UserRow key={user.id} user={user} onUserCallClick={this.props.onUserCallClick} />)
+                                                               .value()
                                     }
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
+                    <Pagination size="lg">
+                        <PaginationItem style={{cursor: 'pointer'}} onClick={this.onPrevClick}>
+                            <PaginationLink>
+                                <i className="fa fa-chevron-left" style={{verticalAlign: 'middle', paddingRight: '10px'}} aria-hidden="true"></i>Previous
+                            </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem style={{cursor: 'pointer'}} onClick={this.onNextClick}>
+                            <PaginationLink>
+                                Next<i className="fa fa-chevron-right" style={{verticalAlign: 'middle', paddingLeft: '10px'}} aria-hidden="true"></i>
+                            </PaginationLink>
+                        </PaginationItem>
+                    </Pagination>
                 </Col>
             </Row>
         );
