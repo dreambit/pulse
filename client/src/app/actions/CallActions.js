@@ -4,7 +4,7 @@ export default flux.createActions([
   'setCallTo',
   'setCallFrom',
   'setCallStatus',
-  'setIceCandidate',
+  'addIceCandidate',
   'setCallAnswer',
   'setOffer',
   'setAnswer',

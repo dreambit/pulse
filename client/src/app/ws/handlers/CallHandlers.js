@@ -29,7 +29,7 @@ function handleCallAnswer(answer) {
  */
 function handleICECandidate(ice) {
   console.log('Call Handler: handleICECandidate');
-  CallActions.setIceCandidate(ice);
+  CallActions.addIceCandidate(ice);
 }
 
 function handleOffer(offer) {

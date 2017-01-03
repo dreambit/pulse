@@ -32,7 +32,7 @@ export default flux.createStore({
     Actions.setCallTo,
     Actions.setCallFrom,
     Actions.setCallStatus,
-    Actions.setIceCandidate,
+    Actions.addIceCandidate,
     Actions.setOffer,
     Actions.setAnswer,
     Actions.setCallAnswer,
@@ -52,7 +52,7 @@ export default flux.createStore({
     this.callStatus = callStatus;
     this.emit('call.status');
   },
-  setIceCandidate: function (ice) {
+  addIceCandidate: function (ice) {
     this.iceCandidate.push(ice);
     this.emit('call.iceCandidate');
   },
@@ -99,6 +99,12 @@ export default flux.createStore({
     },
     getIceCandidate: function () {
       return this.iceCandidate;
+    },
+    getAndResetIceCandidate: function () {
+      let iceCandidate = this.iceCandidate;
+      this.iceCandidate = [];
+
+      return iceCandidate;
     },
     getCallAnswer: function () {
       return this.callAnswer

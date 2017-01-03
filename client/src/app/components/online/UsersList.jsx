@@ -20,6 +20,14 @@ class UsersList extends React.Component {
         index: 0
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.state.index >= nextProps.users.length) {
+            this.setState({
+                index: 0
+            });
+        }
+    }
+
     onNextClick = () => {
         let nextIndex = this.state.index + PAGE_SIZE;
 

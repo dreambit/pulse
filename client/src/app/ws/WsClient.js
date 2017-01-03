@@ -17,7 +17,7 @@ class WsClient {
 
   constructor() {
     console.log('Ws Created');
-    this.socket = io.connect(process.env.WS_CONNECTION_URL);
+    this.socket = io.connect(WS_CONNECTION_URL);
     this.attachListeners();
   }
 

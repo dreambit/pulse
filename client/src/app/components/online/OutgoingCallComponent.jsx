@@ -39,10 +39,28 @@ class OutgoingCallComponent extends Component {
     }
 
     componentDidMount() {
-        this.pc = new RTCPeerConnection();
+        this.pc = new RTCPeerConnection({
+            iceServers: [
+                {
+                    urls: ['stun:stun.l.google.com:19302']
+                },
+                {
+                    username: 'CNr1rsMFEgZtDOUUjgQYzc/s6OMT',
+                    credential: 'o8QL47SMsvCAVlNiogf1//glSvw=',
+                    urls: [
+                        'turn:64.233.161.127:19305?transport=udp',
+                        'turn:[2A00:1450:4010:C01::7F]:19305?transport=udp',
+                        'turn:64.233.161.127:443?transport=tcp',
+                        'turn:[2A00:1450:4010:C01::7F]:443?transport=tcp'
+                    ]
+                }
+            ]
+        });
 
         this.pc.onicecandidate = function (evt) {
             console.log("UI: On Local ICE Candidate");
+            console.log(evt);
+            console.log(evt.candidate);
             sendICECandidate(evt.candidate);
         };
 
@@ -106,8 +124,9 @@ class OutgoingCallComponent extends Component {
     }
 
     onIceCandidate = () => {
-        let ice = CallStore.getIceCandidate();
-        console.log(`UI: On ICE Candidate: ${ice}`);
+        let ice = CallStore.getAndResetIceCandidate();
+        console.log(`UI: On ICE Candidate:`);
+        console.log(ice);
 
         forEach(ice, (val) => {
             this.pc.addIceCandidate(val).then(() => {
