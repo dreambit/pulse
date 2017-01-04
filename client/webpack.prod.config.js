@@ -2,11 +2,26 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/app/index.jsx'),
+  entry: {
+    main: path.resolve(__dirname, 'src/app/index.jsx'),
+    vendor: [
+      'flux-react',
+      'lodash',
+      'react',
+      'react-dom',
+      'react-router',
+      'reactstrap',
+      'socket.io-client',
+      'webrtc-adapter',
+      'react-addons-css-transition-group',
+      'react-addons-transition-group'
+    ]
+  },
   output: {
-    filename: '[hash].bundle.js',
+    filename: '[chunkhash].[name].js',
     path: path.resolve(__dirname, 'dist')
   },
 
@@ -26,11 +41,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loaders: ["style", "css"]
+        loader: ExtractTextPlugin.extract(['css'])
       },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        loader: ExtractTextPlugin.extract(['css','sass'])
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?name=assets/fonts/[hash].[ext]&limit=10000&minetype=application/font-woff"
@@ -45,6 +60,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
+    new ExtractTextPlugin("assets/style/[contenthash].css", {allChunks: true}),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/app/index.html')
     }),
@@ -53,6 +69,9 @@ module.exports = {
         WS_CONNECTION_URL: JSON.stringify(':3000'),
         NODE_ENV: JSON.stringify('production')
       }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest']
     }),
     new webpack.optimize.UglifyJsPlugin()
   ]
