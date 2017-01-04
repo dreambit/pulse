@@ -41,11 +41,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract(['css'])
+        loader: ExtractTextPlugin.extract(['css'], {publicPath: '../../'})
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract(['css','sass'])
+        loader: ExtractTextPlugin.extract(['css','sass'], {publicPath: '../../'})
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?name=assets/fonts/[hash].[ext]&limit=10000&minetype=application/font-woff"
@@ -60,7 +60,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
-    new ExtractTextPlugin("assets/style/[contenthash].css", {allChunks: true}),
+    new ExtractTextPlugin("assets/style/[contenthash].css"),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/app/index.html')
     }),
