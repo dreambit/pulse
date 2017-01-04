@@ -53,6 +53,13 @@ class OutgoingCallComponent extends Component {
                         'turn:64.233.161.127:443?transport=tcp',
                         'turn:[2A00:1450:4010:C01::7F]:443?transport=tcp'
                     ]
+                },
+                {
+                    username: 'rezvan',
+                    credential: 'rezvan',
+                    urls: [
+                        'turn:62.109.5.232'
+                    ]
                 }
             ]
         });
