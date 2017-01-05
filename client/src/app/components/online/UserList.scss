@@ -21,9 +21,14 @@
   .table {
     margin-bottom: 0;
     .table-link {
+      &.passive {
+        color: #ccc;
+        cursor: default;
+      }
       color: #e74c3c;
       font-size: 1.5em;
       margin-right: 12px;
+      cursor: pointer;
     }
   }
   .label {

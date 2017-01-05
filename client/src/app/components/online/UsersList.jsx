@@ -65,7 +65,8 @@ class UsersList extends React.Component {
                                     <tbody>
                                     {
                                         chain(this.props.users).slice(this.state.index, this.state.index + PAGE_SIZE)
-                                                               .map(user => <UserRow key={user.id} user={user} onUserCallClick={this.props.onUserCallClick} />)
+                                                               .map(user => <UserRow key={user.id} user={user}
+                                                                                     onUserCallClick={this.props.onUserCallClick} />)
                                                                .value()
                                     }
                                     </tbody>

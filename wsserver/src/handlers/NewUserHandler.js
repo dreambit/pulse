@@ -4,6 +4,102 @@ var utils = require('../common/utils');
 var MessageTypes = require('../MessageTypes');
 var _ = require('lodash');
 
+var isBusy = function (socket) {
+    return socket['data'].isBusy;
+}
+
+/**
+ * User is making call to the user
+ * @param socket caller socket
+ * @param userId id of the user the caller is making call to
+ */
+var onUserMakingCall = function (io, socket, userId) {
+    let candidate = io.sockets.sockets[userId];
+    let callerData = socket['data'];
+
+    if (candidate && !isBusy(candidate)) {
+        console.log(`User[${callerData.id}] is making call to: ${userId}`);
+        //
+        socket['inCallWith'] = userId;
+        candidate['inCallWith'] = socket.id;
+        // the caller is busy now
+        callerData.isBusy = true;
+        // the user receiving the call is also busy now
+        candidate['data'].isBusy = true;
+        // notify users that the caller and receiver are busy now
+        socket.broadcast.emit(MessageTypes.USER_INFO_UPDATE, callerData);
+        candidate.broadcast.emit(MessageTypes.USER_INFO_UPDATE, candidate['data']);
+
+        // notify receiver about the call
+        candidate.emit(MessageTypes.OUT_INCOMING_CALL, callerData);
+    }
+}
+
+/**
+ *
+ * @param io
+ * @param socket
+ * @param data
+ */
+var onUserCallAnswer = function (io, socket, data) {
+    let candidate = io.sockets.sockets[data.userId];
+    if (candidate) {
+        if (!data.answer) {
+            // when the receiver rejects the call, mark both users as available for call
+            // and notify another users about it
+            candidate['data'].isBusy = false;
+            socket['data'].isBusy = false;
+            candidate['inCallWith'] = undefined;
+            socket['inCallWith'] = undefined;
+
+            socket.broadcast.emit(MessageTypes.USER_INFO_UPDATE, socket['data']);
+            candidate.broadcast.emit(MessageTypes.USER_INFO_UPDATE, candidate['data']);
+        }
+        // notify caller about answer (accept, reject)
+        candidate.emit(MessageTypes.IN_OUT_CALL_ANSWER, data.answer);
+    }
+}
+
+var onUserEndCall = function (io, socket) {
+    let candidateId = socket['inCallWith'];
+
+    if (candidateId) {
+        let candidate = io.sockets.sockets[candidateId];
+
+        if (candidate) {
+            console.log(`User[${socket['data'].id}] ends the conversation with: ${candidateId}`);
+
+            candidate.emit(MessageTypes.IN_OUT_END_CALL);
+            // mark both users as available for call
+            // and notify another users about it
+            candidate['data'].isBusy = false;
+            socket['data'].isBusy = false;
+            candidate['inCallWith'] = undefined;
+            socket['inCallWith'] = undefined;
+
+            socket.broadcast.emit(MessageTypes.USER_INFO_UPDATE, socket['data']);
+            candidate.broadcast.emit(MessageTypes.USER_INFO_UPDATE, candidate['data']);
+        }
+    }
+}
+
+var onUserDisconnect = function (io, socket) {
+    console.log(`Disconnecting: ${socket.id}`);
+
+    // if the user has disconnected(like tab close etc.) and the user has an active call,
+    // notify the user he has call with about disconnection.
+    if (socket['inCallWith']) {
+        let candidate = io.sockets.sockets[socket['inCallWith']];
+        if (candidate) {
+            candidate.emit(MessageTypes.IN_OUT_END_CALL);
+            candidate['inCallWith'] = undefined;
+            candidate['data'].isBusy = false;
+            candidate.broadcast.emit(MessageTypes.USER_INFO_UPDATE, candidate['data']);
+        }
+    }
+    socket.broadcast.emit(MessageTypes.OUT_USER_HAS_LEFT, socket['data']);
+}
+
 module.exports = function (io, socket) {
     console.log(`Connection: ${socket.id}`);
 
@@ -28,41 +124,13 @@ module.exports = function (io, socket) {
     });
 
     // user is making call to the user with id(userId)
-    socket.on(MessageTypes.IN_MAKE_CALL, function (userId) {
-        console.log(`${MessageTypes.IN_MAKE_CALL}: ${userId}`);
-        let candidate = io.sockets.sockets[userId];
-        if (candidate) {
-            console.log(`${MessageTypes.IN_MAKE_CALL}`);
-            console.log(candidate['data']);
-            candidate.emit(MessageTypes.OUT_INCOMING_CALL, socket['data']);
-        } else {
-            console.log(`${MessageTypes.IN_MAKE_CALL}: ${userId}; Candidate not found!`);
-        }
-    });
+    socket.on(MessageTypes.IN_MAKE_CALL, (userId) => onUserMakingCall(io, socket, userId));
 
     // user accepts or declines the call
-    socket.on(MessageTypes.IN_OUT_CALL_ANSWER, function (data) {
-        console.log(MessageTypes.IN_OUT_CALL_ANSWER + "11111111111111111");
-        let candidate = io.sockets.sockets[data.userId];
-        if (candidate) {
-            candidate.emit(MessageTypes.IN_OUT_CALL_ANSWER, data.answer);
-        } else {
-            console.log(`${MessageTypes.IN_OUT_END_CALL}: ${data.userId}; Candidate not found!`);
-        }
-    });
+    socket.on(MessageTypes.IN_OUT_CALL_ANSWER, (data) => onUserCallAnswer(io, socket, data));
 
     // user completes the call
-    socket.on(MessageTypes.IN_OUT_END_CALL, function (userId) {
-        console.log(`${MessageTypes.IN_OUT_END_CALL}: ${userId}`);
-        let candidate = io.sockets.sockets[userId];
-        if (candidate) {
-            console.log(`${MessageTypes.IN_OUT_END_CALL}`);
-            console.log(candidate['data']);
-            candidate.emit(MessageTypes.IN_OUT_END_CALL);
-        } else {
-            console.log(`${MessageTypes.IN_OUT_END_CALL}: ${userId}; Candidate not found!`);
-        }
-    });
+    socket.on(MessageTypes.IN_OUT_END_CALL, (userId) => onUserEndCall(io, socket, userId));
 
     // WebRTC, ICE candidate exchange
     socket.on(MessageTypes.IN_OUT_ICE_CANDIDATE, function (data) {
@@ -106,8 +174,5 @@ module.exports = function (io, socket) {
     });
 
     // user has disconnected
-    socket.on('disconnect', function () {
-        console.log(`Disconnect: ${socket['data']}`);
-        socket.broadcast.emit(MessageTypes.OUT_USER_HAS_LEFT, socket['data']);
-    });
+    socket.on('disconnect', () => onUserDisconnect(io, socket));
 }

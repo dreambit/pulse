@@ -1,4 +1,5 @@
 import CallActions from '../../actions/CallActions';
+import CallStore from '../../stores/CallStore';
 
 /**
  * Incoming call
@@ -10,7 +11,13 @@ import CallActions from '../../actions/CallActions';
 function handleIncomingCall(call) {
   console.log('Call Handler: handleIncomingCall');
   console.log(call);
-  CallActions.setCallFrom(call);
+
+  // if user is in call, in, out
+  if (CallStore.getCallFrom() || CallStore.getCallTo()) {
+    console.log('Call Handler: handleIncomingCall; Is busy');
+  } else {
+    CallActions.setCallFrom(call);
+  }
 }
 
 function handleEndCall() {

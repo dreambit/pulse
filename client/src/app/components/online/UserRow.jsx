@@ -10,7 +10,9 @@ class UserRow extends React.Component {
 
     onUserCallClick = (e) => {
         e.preventDefault();
-        this.props.onUserCallClick(this.props.user);
+        if (!this.props.user.isBusy) {
+            this.props.onUserCallClick(this.props.user);
+        }
     }
 
     renderGenderIcon = () => {
@@ -41,15 +43,10 @@ class UserRow extends React.Component {
                     <span className="label label-default">{this.props.user.level}</span>
                 </td>
                 <td style={{width: '20%'}}>
-                    <a href="#" className="table-link">
-                        <i className="fa fa-phone" onClick={this.onUserCallClick}></i>
-                    </a>
-                    <a href="#" className="table-link">
-                        <i className="fa fa-comments"></i>
-                    </a>
-                    <a href="#" className="table-link">
-                        <i className="fa fa-address-book"></i>
-                    </a>
+                    <i className={`table-link ${this.props.user.isBusy ? 'passive': ''} fa fa-phone`}
+                       title={this.props.user.isBusy ? 'User is in call' : ''}
+                       onClick={this.onUserCallClick} />
+                    <i className="table-link fa fa-comments" />
                 </td>
             </tr>
     );
