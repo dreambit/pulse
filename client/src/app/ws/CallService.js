@@ -22,9 +22,7 @@ function endCall() {
 }
 
 function sendCallAnswer(answer) {
-  let user = CallStore.getCallFrom();
-
-  WsClient.sendCallAnswer(user.id, answer);
+  WsClient.sendCallAnswer(answer);
 }
 
 function sendICECandidate(ice) {

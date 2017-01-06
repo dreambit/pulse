@@ -41,22 +41,27 @@ var onUserMakingCall = function (io, socket, userId) {
  * @param socket
  * @param data
  */
-var onUserCallAnswer = function (io, socket, data) {
-    let candidate = io.sockets.sockets[data.userId];
-    if (candidate) {
-        if (!data.answer) {
-            // when the receiver rejects the call, mark both users as available for call
-            // and notify another users about it
-            candidate['data'].isBusy = false;
-            socket['data'].isBusy = false;
-            candidate['inCallWith'] = undefined;
-            socket['inCallWith'] = undefined;
+var onUserCallAnswer = function (io, socket, answer) {
+    let candidateId = socket['inCallWith'];
 
-            socket.broadcast.emit(MessageTypes.USER_INFO_UPDATE, socket['data']);
-            candidate.broadcast.emit(MessageTypes.USER_INFO_UPDATE, candidate['data']);
+    if (candidateId) {
+        let candidate = io.sockets.sockets[candidateId];
+
+        if (candidate) {
+            if (!answer) {
+                // when the receiver rejects the call, mark both users as available for call
+                // and notify another users about it
+                candidate['data'].isBusy = false;
+                socket['data'].isBusy = false;
+                candidate['inCallWith'] = undefined;
+                socket['inCallWith'] = undefined;
+
+                socket.broadcast.emit(MessageTypes.USER_INFO_UPDATE, socket['data']);
+                candidate.broadcast.emit(MessageTypes.USER_INFO_UPDATE, candidate['data']);
+            }
+            // notify caller about answer (accept, reject)
+            candidate.emit(MessageTypes.IN_OUT_CALL_ANSWER, answer);
         }
-        // notify caller about answer (accept, reject)
-        candidate.emit(MessageTypes.IN_OUT_CALL_ANSWER, data.answer);
     }
 }
 

@@ -23,7 +23,6 @@ export default flux.createStore({
   callFrom: undefined,
   callStatus: undefined,
   callType: undefined,
-  iceCandidate: [],
   offer: undefined,
   answer: undefined,
   callAnswer: undefined,
@@ -53,8 +52,7 @@ export default flux.createStore({
     this.emit('call.status');
   },
   addIceCandidate: function (ice) {
-    this.iceCandidate.push(ice);
-    this.emit('call.iceCandidate');
+    this.emit('call.iceCandidate', ice);
   },
   setOffer: function (offer) {
     this.offer = offer;
@@ -73,7 +71,6 @@ export default flux.createStore({
     this.callType = undefined;
     this.callFrom = undefined;
     this.callStatus = undefined;
-    this.iceCandidate = [];
     this.offer = undefined;
     this.answer = undefined;
     this.emit('call.reset');
@@ -96,15 +93,6 @@ export default flux.createStore({
     },
     getAnswer: function () {
       return this.answer;
-    },
-    getIceCandidate: function () {
-      return this.iceCandidate;
-    },
-    getAndResetIceCandidate: function () {
-      let iceCandidate = this.iceCandidate;
-      this.iceCandidate = [];
-
-      return iceCandidate;
     },
     getCallAnswer: function () {
       return this.callAnswer

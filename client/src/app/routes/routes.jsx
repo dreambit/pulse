@@ -6,7 +6,7 @@ import OnlineUsersView from './../views/OnlineUsersView';
 const routes = () => {
   return (
     <Route path="/" component={App}>
-      <Route path="/online" component={OnlineUsersView} />
+        <IndexRoute component={OnlineUsersView}/>
     </Route>
   );
 }

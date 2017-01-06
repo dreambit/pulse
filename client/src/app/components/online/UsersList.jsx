@@ -46,6 +46,23 @@ class UsersList extends React.Component {
         }
     }
 
+    renderPagination = () => {
+        return (
+            <Pagination>
+                <PaginationItem style={{cursor: 'pointer'}} onClick={this.onPrevClick}>
+                    <PaginationLink>
+                        <i className="fa fa-chevron-left" style={{verticalAlign: 'middle', paddingRight: '10px'}} aria-hidden="true"></i>Previous
+                    </PaginationLink>
+                </PaginationItem>
+                <PaginationItem style={{cursor: 'pointer'}} onClick={this.onNextClick}>
+                    <PaginationLink>
+                        Next<i className="fa fa-chevron-right" style={{verticalAlign: 'middle', paddingLeft: '10px'}} aria-hidden="true"></i>
+                    </PaginationLink>
+                </PaginationItem>
+            </Pagination>
+        );
+    }
+
     render() {
         return (
             <Row className="users-list">
@@ -75,18 +92,9 @@ class UsersList extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <Pagination size="lg">
-                        <PaginationItem style={{cursor: 'pointer'}} onClick={this.onPrevClick}>
-                            <PaginationLink>
-                                <i className="fa fa-chevron-left" style={{verticalAlign: 'middle', paddingRight: '10px'}} aria-hidden="true"></i>Previous
-                            </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem style={{cursor: 'pointer'}} onClick={this.onNextClick}>
-                            <PaginationLink>
-                                Next<i className="fa fa-chevron-right" style={{verticalAlign: 'middle', paddingLeft: '10px'}} aria-hidden="true"></i>
-                            </PaginationLink>
-                        </PaginationItem>
-                    </Pagination>
+                    {
+                        (this.props.users.length > PAGE_SIZE) ? this.renderPagination() : null
+                    }
                 </Col>
             </Row>
         );

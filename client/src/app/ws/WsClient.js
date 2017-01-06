@@ -61,12 +61,9 @@ class WsClient {
     this.socket.emit(WsMessageTypes.IN_OUT_END_CALL, userId);
   }
 
-  sendCallAnswer(userId, answer) {
-    console.log(`WsClient: sendCallAnswer ${userId}`);
-    this.socket.emit(WsMessageTypes.IN_OUT_CALL_ANSWER, {
-      userId: userId,
-      answer: answer
-    });
+  sendCallAnswer(answer) {
+    console.log(`WsClient: sendCallAnswer ${answer}`);
+    this.socket.emit(WsMessageTypes.IN_OUT_CALL_ANSWER, answer);
   }
 
   sendICECandidate(userId, ice) {

@@ -130,19 +130,15 @@ class OutgoingCallComponent extends Component {
         })
     }
 
-    onIceCandidate = () => {
-        let ice = CallStore.getAndResetIceCandidate();
-        console.log(`UI: On ICE Candidate:`);
-        console.log(ice);
+    onIceCandidate = (iceCandidate) => {
+        console.log(`UI: On ICE Candidate`);
+        console.log(iceCandidate);
 
-        forEach(ice, (val) => {
-            this.pc.addIceCandidate(val).then(() => {
-                console.log('Ice successfully added');
-            }, (e) => {
-                this.rejectCallOnError('Ice add failure', e);
-            });
+        this.pc.addIceCandidate(iceCandidate).then(() => {
+            console.log('Ice successfully added');
+        }, (e) => {
+            this.rejectCallOnError('Ice add failure', e);
         });
-
     }
 
     onMediaSuccess = (stream) => {

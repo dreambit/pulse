@@ -13,14 +13,10 @@ class App extends React.Component {
     return (
       <div>
         <Navbar color="faded" light>
-          <NavbarBrand href="/">Pulse</NavbarBrand>
+          <NavbarBrand href="/">
+              <img src={require('../../img/pulse.png')} width="180px" height="40px"/>
+          </NavbarBrand>
           <Nav className="float-xs-right" navbar>
-            <NavItem>
-              <NavLink tag={Link} to="/online">Dashboard</NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink tag={Link} to="/">Main</NavLink>
-            </NavItem>
           </Nav>
         </Navbar>
         <Container fluid>
