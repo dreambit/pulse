@@ -159,6 +159,7 @@ class IncomingCallComponent extends Component {
     renderIncomingCall = () => {
         return (
             <div>
+                <audio src={require('../../../audio/incoming_call.mp3')} autoPlay />
                 <Row style={{paddingTop: '80px', textAlign: 'center'}} className="call-component">
                     <Col lg={{ size: 6, push: 3, pull: 3 }}>
                         <InCallUserComponent userName={CallStore.getCallFrom().userName} />

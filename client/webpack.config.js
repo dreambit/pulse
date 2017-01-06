@@ -41,6 +41,9 @@ module.exports = {
       },
       {
         test: /\.(png|gif|jpg)$/, loader: "url-loader?limit=10000&name=img/[hash].[ext]"
+      },
+      {
+        test: /\.(mp3)$/, loader: "file-loader"
       }
     ]
   },
